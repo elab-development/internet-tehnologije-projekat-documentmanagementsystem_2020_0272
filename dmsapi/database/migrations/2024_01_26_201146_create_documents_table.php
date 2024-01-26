@@ -19,11 +19,13 @@ return new class extends Migration
             $table->text('content');
             $table->string('file_path')->nullable();
             $table->unsignedBigInteger('author_id');
+            $table->unsignedBigInteger('category_id');
             $table->integer('downloads')->default(0);
             $table->boolean('is_public')->default(true);
+            $table->text('tags');
             $table->timestamps();
             $table->softDeletes();
-            $table->timestamps();
+         
         });
     }
 
