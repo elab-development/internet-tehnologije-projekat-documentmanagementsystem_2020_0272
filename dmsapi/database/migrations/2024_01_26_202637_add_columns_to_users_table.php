@@ -12,12 +12,10 @@ return new class extends Migration
      * @return void
      */
     public function up()
-    {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->timestamps();
+    {   
+        Schema::table('users', function (Blueprint $table) {
+            $table->date('date_of_birth');
+            $table->text('bio');
         });
     }
 
@@ -28,6 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('date_of_birth');
+            $table->dropColumn('bio');
+        });
     }
 };

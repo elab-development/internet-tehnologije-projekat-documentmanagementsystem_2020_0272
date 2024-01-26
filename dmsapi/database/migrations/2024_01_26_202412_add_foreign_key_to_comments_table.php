@@ -13,11 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->timestamps();
+        Schema::table('comments', function (Blueprint $table) {
+            $table->foreign('document_id')->references('id')->on('documents');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -28,6 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropForeign('document_id');
+            $table->dropForeign('document_id');
+        });
     }
 };

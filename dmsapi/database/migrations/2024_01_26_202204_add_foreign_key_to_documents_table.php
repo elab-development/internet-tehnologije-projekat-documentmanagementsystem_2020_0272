@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->timestamps();
+        Schema::table('documents', function (Blueprint $table) {
+            $table->foreign('author_id')->references('id')->on('users');
         });
     }
 
@@ -28,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::table('documents', function (Blueprint $table) {
+            $table->dropForeign('author_id');
+        });
     }
 };

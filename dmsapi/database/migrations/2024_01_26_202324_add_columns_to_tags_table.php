@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->timestamps();
+        Schema::table('tags', function (Blueprint $table) {
+            $table->string('slug')->unique(); // Polje za jedinstveni slug
         });
     }
 
@@ -28,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::table('tags', function (Blueprint $table) {
+            $table->dropColumn('slug');
+        });
     }
 };
