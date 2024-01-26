@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/documents/search', [DocumentController::class, 'search']);  //GET /api/documents/search?title=izveštaj&category_id=3&tags[]=1&tags[]=5&is_public=1
+Route::get('/documents/{document}/download', [DocumentController::class, 'download']);
 
 Route::apiResource('documents', DocumentController::class);
 Route::apiResource('comments', CommentController::class);

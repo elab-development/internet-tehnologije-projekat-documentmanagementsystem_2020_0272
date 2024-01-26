@@ -155,6 +155,23 @@ class DocumentController extends Controller
 
     // Vraćamo dokumente kao JSON odgovor
     return response()->json($documents);
-}
+    }
+    public function download($id)
+    {
+        $document = Document::findOrFail($id);
+
+        //   'file_path' čuva putanju do fajla u sistemu fajlova
+        $filePath = $document->file_path;
+
+        if (!Storage::exists($filePath)) {
+            return response()->json(['message' => 'File not found.'], 404);
+        }
+
+        // Povratni naziv fajla koji korisnik vidi prilikom preuzimanja
+        $fileName = basename($filePath);
+
+        // Preuzimanje fajla koristeći Laravel-ovu funkcionalnost za rad sa fajlovima
+        return Storage::download($filePath, $fileName);
+    }
 
 }
