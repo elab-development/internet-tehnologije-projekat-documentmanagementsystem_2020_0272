@@ -110,5 +110,51 @@ class DocumentController extends Controller
             return response()->json(null, 204);
         }
     }
+    public function search(Request $request)
+{
+    // Počinjemo sa kreiranjem osnovnog upita
+    $query = Document::query();
+
+    // Filtriramo po naslovu ako je prosleđen kao parametar
+    if ($request->has('title')) {
+        $query->where('title', 'like', '%' . $request->title . '%');
+    }
+
+    // Filtriramo po sadržaju ako je prosleđen kao parametar
+    if ($request->has('content')) {
+        $query->where('content', 'like', '%' . $request->content . '%');
+    }
+
+    // Filtriramo po autoru ako je prosleđen kao parametar
+    if ($request->has('author_id')) {
+        $query->where('author_id', $request->author_id);
+    }
+
+    // Filtriramo po kategoriji ako je prosleđen kao parametar
+    if ($request->has('category_id')) {
+        $query->where('category_id', $request->category_id);
+    }
+
+    // Filtriramo po tagovima ako su prosleđeni kao parametar
+    if ($request->has('tags')) {
+        $tags = $request->tags;
+        $query->whereHas('tags', function ($query) use ($tags) {
+            $query->whereIn('id', $tags);
+        });
+    }
+
+    // Filtriramo po dostupnosti ako je prosleđen kao parametar
+    if ($request->has('is_public')) {
+        $query->where('is_public', $request->is_public);
+    }
+
     
+
+    // Dobijamo filtrirane dokumente
+    $documents = $query->get();
+
+    // Vraćamo dokumente kao JSON odgovor
+    return response()->json($documents);
+}
+
 }

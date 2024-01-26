@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('/documents/search', [DocumentController::class, 'search']);  //GET /api/documents/search?title=izveštaj&category_id=3&tags[]=1&tags[]=5&is_public=1
+
 Route::apiResource('documents', DocumentController::class);
 Route::apiResource('comments', CommentController::class);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
