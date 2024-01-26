@@ -23,6 +23,12 @@ class User extends Authenticatable
         'password',
     ];
 
+
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
