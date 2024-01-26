@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +21,8 @@ Route::get('/documents/search', [DocumentController::class, 'search']);  //GET /
 
 Route::apiResource('documents', DocumentController::class);
 Route::apiResource('comments', CommentController::class);
+Route::apiResource('tags', TagController::class);
+Route::apiResource('categories', CategoryController::class);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
