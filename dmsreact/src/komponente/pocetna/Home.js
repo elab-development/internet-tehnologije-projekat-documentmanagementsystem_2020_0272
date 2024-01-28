@@ -4,6 +4,8 @@ import { AiFillProject } from "react-icons/ai";
 import { MdOutlineBusinessCenter } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { FaTasks } from "react-icons/fa";
+import OptionCard from './OptionCard';  
+
 const Home = () => {
   return (
     <div className="home-container">
@@ -12,22 +14,10 @@ const Home = () => {
         <p>Automate tasks and streamline processes with an easy-to-use platform</p>
       </header>
       <section className="management-options">
-        <div className="option-card">
-          <div ><AiFillProject className="icon" /></div>
-          <p>Project management</p>
-        </div>
-        <div className="option-card">
-        <div ><FaTasks className="icon" /></div>
-          <p>Task management</p>
-        </div>
-        <div className="option-card">
-        <div ><FaUser className="icon" /></div>
-          <p>Client projects</p>
-        </div>
-        <div className="option-card">
-            <div ><MdOutlineBusinessCenter  className="icon" /></div>
-            <p>Business operations</p>
-        </div>
+        <OptionCard icon={<AiFillProject className="icon" />} text="Project management" />
+        <OptionCard icon={<FaTasks className="icon" />} text="Task management" />
+        <OptionCard icon={<FaUser className="icon" />} text="Client projects" />
+        <OptionCard icon={<MdOutlineBusinessCenter className="icon" />} text="Business operations" />
       </section>
       <footer className="footer">
         <button className="get-started">Get Started</button>
