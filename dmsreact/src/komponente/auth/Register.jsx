@@ -1,25 +1,38 @@
 import React, { useState } from 'react';
 import './Register.css';
-import InputField from './InputField'; 
+import InputField from './InputField';
+import axios from 'axios'; // Dodajte Axios import
+import { useNavigate } from 'react-router-dom'; // Dodajte import za useNavigate
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    dateOfBirth: '',
-    bio: ''
+    name: 'ana',
+    email: 'ana@gmail.com',
+    password: 'anaana1234',
+    password_confirmation: 'anaana1234',
+    date_of_birth: '2000-01-01',
+    bio: 'ana bio'
   });
+
+  const navigate = useNavigate();  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
- 
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/register', formData);  
+      console.log(response.data);  
+      navigate('/login');  
+    } catch (error) {
+      console.error(error);
+       
+    }
   };
+
 
   return (
     <div className="register-container">
@@ -57,7 +70,7 @@ const Register = () => {
             label="Confirm Password"
             type="password"
             id="confirmPassword"
-            name="confirmPassword"
+            name="password_confirmation"
             value={formData.confirmPassword}
             onChange={handleChange}
             required
@@ -66,7 +79,7 @@ const Register = () => {
             label="Date of Birth"
             type="date"
             id="dateOfBirth"
-            name="dateOfBirth"
+            name="date_of_birth"
             value={formData.dateOfBirth}
             onChange={handleChange}
             required
