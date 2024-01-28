@@ -1,0 +1,65 @@
+.home-container {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    background-color: #cfe8ef;
+  }
+  
+  .header h1 {
+    color: #333;
+    font-size: 3.375rem;
+    line-height: 68px;
+    font-weight: 700;
+  }
+  
+  .header p {
+    color: #666;
+    font-size: 1.375rem;
+    line-height: 40px;
+  }
+  
+  .management-options {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+   
+  }
+  
+  .option-card {
+    background-color: #aed1e6;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .option-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .option-card .icon {
+    background-color: #85c7de;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+  }
+  
+  .footer {
+    background-color: #a0c4e2;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .get-started {
+    background-color: #85c7de;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .get-started:hover {
+    background-color: #c6dbf0;
+  }
+  
