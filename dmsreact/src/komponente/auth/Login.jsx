@@ -1,22 +1,31 @@
 import React from 'react';
 import './Login.css';
 import { FaUser } from "react-icons/fa";
+import InputField from './InputField'; 
+
 const Login = () => {
   return (
     <div className="login-container">
       <div className="login-card">
         <div className="login-icon">
-            <FaUser></FaUser>
+          <FaUser />
         </div>
         <form className="login-form">
-          <div className="input-group">
-            <label htmlFor="email">Email Address</label>
-            <input type="email" id="email" placeholder="Username@gmail.com" />
-          </div>
-          <div className="input-group">
-            <label htmlFor="password">Password</label>
-            <input type="password" id="password" />
-          </div>
+          <InputField
+            label="Email Address"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Username@gmail.com"
+            required
+          />
+          <InputField
+            label="Password"
+            type="password"
+            id="password"
+            name="password"
+            required
+          />
           <button type="submit" className="login-button">Login</button>
         </form>
         <div className="login-footer">

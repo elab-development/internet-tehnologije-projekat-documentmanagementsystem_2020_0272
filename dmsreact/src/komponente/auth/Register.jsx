@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Register.css';
+import InputField from './InputField'; 
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -17,7 +18,7 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-   
+ 
   };
 
   return (
@@ -25,30 +26,60 @@ const Register = () => {
       <div className="register-card">
         <h2>Register</h2>
         <form className="register-form" onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label htmlFor="name">Name</label>
-            <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required />
-          </div>
-          <div className="input-group">
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
-          </div>
-          <div className="input-group">
-            <label htmlFor="password">Password</label>
-            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
-          </div>
-          <div className="input-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
-          </div>
-          <div className="input-group">
-            <label htmlFor="dateOfBirth">Date of Birth</label>
-            <input type="date" id="dateOfBirth" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
-          </div>
-          <div className="input-group">
-            <label htmlFor="bio">Bio</label>
-            <textarea id="bio" name="bio" value={formData.bio} onChange={handleChange} required></textarea>
-          </div>
+          <InputField
+            label="Name"
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <InputField
+            label="Email"
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <InputField
+            label="Password"
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <InputField
+            label="Confirm Password"
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+          <InputField
+            label="Date of Birth"
+            type="date"
+            id="dateOfBirth"
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
+            onChange={handleChange}
+            required
+          />
+          <InputField
+            label="Bio"
+            type="textarea"
+            id="bio"
+            name="bio"
+            value={formData.bio}
+            onChange={handleChange}
+            required
+          />
           <button type="submit" className="register-button">Register</button>
         </form>
       </div>
