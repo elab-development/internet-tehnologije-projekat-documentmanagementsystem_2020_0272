@@ -5,15 +5,17 @@ import Login from './komponente/auth/Login';
 import Register from './komponente/auth/Register';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './komponente/navbar/Navbar';
+import { useState } from 'react';
 function App() {
+  const [token,setToken]=useState(null);
   return (
 
     <div className='App'>
       <Router>
-      <Navbar />
+      <Navbar  token={token} setToken={setToken}/>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login  setToken={setToken}/>} />
           <Route path="/register" element={<Register />} />
         </Routes>
     </Router>

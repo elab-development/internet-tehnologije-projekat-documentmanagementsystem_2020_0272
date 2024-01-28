@@ -4,7 +4,7 @@ import { FaUser } from "react-icons/fa";
 import InputField from './InputField';
 import axios from 'axios'; 
 
-const Login = () => {
+const Login = ({setToken}) => {
   const [formData, setFormData] = useState({
     email: 'ana@gmail.com',
     password: 'anaana1234',
@@ -20,7 +20,7 @@ const Login = () => {
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login', formData);  
       const { token } = response.data;
-      
+      setToken(token)
       sessionStorage.setItem('token', token);  
       console.log('Login successful');  
     
