@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './DocumentsTable.css';
+import DocumentTableRow from './DocumentTableRow';
 
 const DocumentsTable = () => {
     const [documents, setDocuments] = useState([]);
@@ -36,7 +37,8 @@ const DocumentsTable = () => {
             console.error('There was an error downloading the file:', error);
         });
     };
-    const handleDelete = (documentId) => { 
+    const handleDelete = (documentId) => {
+        
         const token = sessionStorage.getItem('token');  
         const config = {
             headers: {
@@ -70,18 +72,13 @@ const DocumentsTable = () => {
                 </thead>
                 <tbody>
                 {documents.map((document) => (
-                    <tr key={document.id}>
-                        <td>{document.id}</td>
-                        <td>{document.title}</td>
-                        <td>{document.content}</td>
-                        <td>{document.author_id}</td>
-                        <td>{document.category_id}</td>
-                        <td>{document.tags.join(', ')}</td>
-                        <td>{document.is_public ? 'Yes' : 'No'}</td>
-                        <td><button onClick={() => handleDownload(document.id, document.title)}>Download</button></td>
-                        <td><button onClick={() => handleDelete(document.id)}>Obriši</button></td>
-                    </tr>
-                ))}
+                        <DocumentTableRow
+                            key={document.id}
+                            document={document}
+                            onDelete={handleDelete}
+                            onDownload={handleDownload}
+                        />
+                    ))}
                 </tbody>
             </table>
         </div>
