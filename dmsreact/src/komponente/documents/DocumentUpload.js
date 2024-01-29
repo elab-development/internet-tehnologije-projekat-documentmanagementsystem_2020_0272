@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
  
 import './DocumentUpload.css';  
 import InputField from '../auth/InputField';
+import { useNavigate } from 'react-router-dom';
 
 const DocumentUpload = () => {
+    let navigate= useNavigate();
     const [formData, setFormData] = useState({
         title: '',
         content: '',
@@ -15,18 +17,44 @@ const DocumentUpload = () => {
         is_public: false,
         downloads: 0
     });
+
+    const [categories, setCategories] = useState([]);
+     const [tags, setTags] = useState([]);
+    useEffect(() => {
+        axios.get('http://127.0.0.1:8000/api/categories')
+            .then(response => {
+                setCategories(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+            });
+        axios.get('http://127.0.0.1:8000/api/tags')
+            .then(response => {
+                setTags(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching tags:', error);
+            });
+    }, []);
+ 
+
+
+
+
+
+
+
     const handleChange = (e) => {
-        const { name, type, checked } = e.target;
-        let newValue;
-    
-        if (type === 'checkbox') {
-            newValue = checked ? 1 : 0; // Ako je checkbox označen, vrednost će biti 1, inače 0
+        const { name, type, value, options } = e.target;
+        
+        if (type === 'select-multiple') {
+            let selectedValues = Array.from(options).filter(o => o.selected).map(o => o.value);
+            setFormData({ ...formData, [name]: selectedValues });
         } else {
-            newValue = e.target.value;
+            setFormData({ ...formData, [name]: value });
         }
-    
-        setFormData({ ...formData, [name]: newValue });
     };
+    
     
     
 
@@ -50,6 +78,8 @@ const DocumentUpload = () => {
         axios.post('http://127.0.0.1:8000/api/documents', data)
             .then(response => {
                 console.log('Document uploaded successfully:', response.data);
+                alert('Document uploaded successfully');
+                navigate('/docs');
             })
             .catch(error => {
                 console.error('Error uploading document:', error);
@@ -63,11 +93,28 @@ const DocumentUpload = () => {
                 <form onSubmit={handleSubmit} className="register-form">
                     <InputField label="Title" type="text" id="title" name="title" value={formData.title} onChange={handleChange} required />
                     <InputField label="Content" type="text" id="content" name="content" value={formData.content} onChange={handleChange} required />
-                    
-                    <InputField label="Category ID" type="text" id="category_id" name="category_id" value={formData.category_id} onChange={handleChange} required />
-                    <InputField label="Tags" type="text" id="tags" name="tags" value={formData.tags} onChange={handleChange} required />
+                    <div className="input-group">
+                        <label htmlFor="category_id">Category ID</label>
+                        <select id="category_id" name="category_id" value={formData.category_id} onChange={handleChange} required>
+                            <option value="">Select a category</option>
+                            {categories.map((category) => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="input-group">
+                        <label htmlFor="tags">Tags</label>
+                        <select id="tags" name="tags" multiple value={formData.tags} onChange={handleChange} required>
+                            {tags.map((tag) => (
+                                <option key={tag.id} value={tag.id}>
+                                    {tag.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div> 
                     <InputField label="File" type="file" id="file" name="file" onChange={handleFileChange} required />
-                    <InputField label="Is public" type="checkbox" id="is_public" name="is_public" value={formData.is_public} onChange={handleChange} />
                     <button type="submit" className="register-button">Upload</button>
                 </form>
             </div>
