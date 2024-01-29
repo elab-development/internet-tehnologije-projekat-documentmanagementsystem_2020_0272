@@ -37,9 +37,15 @@ class Document extends Model
     }
     public function setTagsAttribute($value)// Konvertujemo niz tagova u string i cuvamo kao string u bazu
     {
-        
-        $this->attributes['tags'] = implode(',', $value);
+        // Samo konvertujemo u string ako je $value niz
+        if (is_array($value)) {
+            $this->attributes['tags'] = implode(',', $value);
+        } else {
+            // Ako je $value već string, jednostavno ga postavljamo
+            $this->attributes['tags'] = $value;
+        }
     }
+    
 
     public function getTagsAttribute($value)// Uzimamo string tagova iz baze i pretvaramo ga u niz
     {

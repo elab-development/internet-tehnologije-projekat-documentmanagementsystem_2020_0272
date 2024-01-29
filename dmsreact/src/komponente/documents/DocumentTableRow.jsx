@@ -1,7 +1,7 @@
 import React from 'react';
  
 
-const DocumentTableRow = ({ document, onDelete, onDownload }) => {
+const DocumentTableRow = ({ document, onDelete, onDownload,onEdit }) => {
     const handleDownload = () => {
         onDownload(document.id, document.title);
     };
@@ -9,7 +9,9 @@ const DocumentTableRow = ({ document, onDelete, onDownload }) => {
     const handleDelete = () => {
         onDelete(document.id);
     };
-
+    const handleEdit = () => {
+        onEdit(document);
+    };
     return (
         <tr key={document.id}>
             <td>{document.id}</td>
@@ -24,6 +26,9 @@ const DocumentTableRow = ({ document, onDelete, onDownload }) => {
             </td>
             <td>
                 <button onClick={handleDelete}>Obriši</button>
+            </td>
+            <td>
+                 <button onClick={handleEdit}>Edit</button> 
             </td>
         </tr>
     );

@@ -3,10 +3,47 @@ import axios from 'axios';
 import './DocumentsTable.css';
 import DocumentTableRow from './DocumentTableRow';
 import useDocuments from '../customHooks/useDocuments';
+import useCategories from '../customHooks/useCategories';
+import useTags from '../customHooks/useTags';
+import DocumentEditModal from './update/DocumentEditModal';
  
 
 const DocumentsTable = () => {
     const { documents,setDocuments, error } = useDocuments();
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [currentDocument, setCurrentDocument] = useState(null);
+    const {categories,setCategories} = useCategories();
+    const {tags,setTags} = useTags();
+    const handleEdit = (document) => {
+        setCurrentDocument(document);
+        setIsEditModalOpen(true);
+    };
+    const handleSaveEdit = (documentId, editFormData) => {
+        const token = sessionStorage.getItem('token');  
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json' // Ako šaljete JSON
+            }
+        }; 
+    
+        const updatedData = {
+            ...editFormData,
+            tags: editFormData.tags.map(Number)
+        };
+        console.log(updatedData.tags)
+        axios.put(`http://127.0.0.1:8000/api/documents/${documentId}`, updatedData, config)
+            .then(response => {
+                // Ažuriranje prikaza dokumenata
+                setDocuments(documents.map(doc => doc.id === documentId ? {...doc, ...response.data} : doc));
+                alert('Document updated successfully');
+                setIsEditModalOpen(false); // Zatvaranje modala
+            })
+            .catch(error => {
+                console.error('Error updating document:', error);
+            });
+    };
+    
     // const [documents, setDocuments] = useState([]);
 
     // useEffect(() => {
@@ -73,19 +110,30 @@ const DocumentsTable = () => {
                         <th>Public</th>
                         <th>Download</th>
                         <th>Delete</th>
+                        <th>Edit</th>
                     </tr>
                 </thead>
                 <tbody>
                 {documents.map((document) => (
-                        <DocumentTableRow
+                       <DocumentTableRow
                             key={document.id}
                             document={document}
                             onDelete={handleDelete}
                             onDownload={handleDownload}
+                            onEdit={handleEdit}
                         />
                     ))}
                 </tbody>
             </table>
+            {isEditModalOpen && currentDocument && (
+                <DocumentEditModal
+                    document={currentDocument}
+                    categories={categories}
+                    tags={tags}
+                    onSave={handleSaveEdit}
+                    onClose={() => setIsEditModalOpen(false)}
+                />
+            )}
         </div>
     );
 };
