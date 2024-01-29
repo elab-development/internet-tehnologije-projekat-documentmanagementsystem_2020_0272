@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './DocumentsTable.css';
 import DocumentTableRow from './DocumentTableRow';
-import useDocuments from './useDocuments';
+import useDocuments from '../customHooks/useDocuments';
+ 
 
 const DocumentsTable = () => {
     const { documents,setDocuments, error } = useDocuments();

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
- 
+import axios from 'axios'; 
 import './DocumentUpload.css';  
 import InputField from '../auth/InputField';
 import { useNavigate } from 'react-router-dom';
-
+import useCategories from '../customHooks/useCategories';
+import useTags from '../customHooks/useTags';
 const DocumentUpload = () => {
     let navigate= useNavigate();
     const [formData, setFormData] = useState({
@@ -18,31 +18,8 @@ const DocumentUpload = () => {
         downloads: 0
     });
 
-    const [categories, setCategories] = useState([]);
-     const [tags, setTags] = useState([]);
-    useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/categories')
-            .then(response => {
-                setCategories(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
-            });
-        axios.get('http://127.0.0.1:8000/api/tags')
-            .then(response => {
-                setTags(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching tags:', error);
-            });
-    }, []);
- 
-
-
-
-
-
-
+    const {categories,setCategories} = useCategories();
+    const {tags,setTags} = useTags();
 
     const handleChange = (e) => {
         const { name, type, value, options } = e.target;
