@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import axios from 'axios';
-
+import { MdDocumentScanner } from "react-icons/md";
 const Navbar = ({ token, setToken }) => {
     let navigate= useNavigate();
     const handleLogout = async () => {
@@ -26,7 +26,7 @@ const Navbar = ({ token, setToken }) => {
   return (
     <nav className="navbar">
       <div className="logo">
-        LOGO
+      <MdDocumentScanner />
       </div>
       <ul className="nav-links">
         <li>
@@ -34,6 +34,9 @@ const Navbar = ({ token, setToken }) => {
         </li>
         {token ? (
           <>
+          <li>
+          <Link to="/docs/it" className="nav-link">IT docs</Link>
+        </li>
         <li>
           <Link to="/docs/upload" className="nav-link">Upload</Link>
         </li>
