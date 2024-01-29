@@ -36,6 +36,22 @@ const DocumentsTable = () => {
             console.error('There was an error downloading the file:', error);
         });
     };
+    const handleDelete = (documentId) => { 
+        const token = sessionStorage.getItem('token');  
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }; 
+        axios.delete(`http://127.0.0.1:8000/api/documents/${documentId}`, config)
+            .then(() => {
+                setDocuments(documents.filter(document => document.id !== documentId));
+            })
+            .catch((error) => {
+                console.error('Došlo je do greške prilikom brisanja dokumenta:', error);
+            });
+    };
+    
     return (
         <div className="documents-container">
             <table className="documents-table">
@@ -49,21 +65,23 @@ const DocumentsTable = () => {
                         <th>Tags</th>
                         <th>Public</th>
                         <th>Download</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {documents.map((document) => (
-                        <tr key={document.id}>
-                            <td>{document.id}</td>
-                            <td>{document.title}</td>
-                            <td>{document.content}</td>
-                            <td>{document.author_id}</td>
-                            <td>{document.category_id}</td>
-                            <td>{document.tags.join(', ')}</td>
-                            <td>{document.is_public ? 'Yes' : 'No'}</td> 
-                            <td><button onClick={() => handleDownload(document.id, document.title)}>Download</button></td>
-                        </tr>
-                    ))}
+                {documents.map((document) => (
+                    <tr key={document.id}>
+                        <td>{document.id}</td>
+                        <td>{document.title}</td>
+                        <td>{document.content}</td>
+                        <td>{document.author_id}</td>
+                        <td>{document.category_id}</td>
+                        <td>{document.tags.join(', ')}</td>
+                        <td>{document.is_public ? 'Yes' : 'No'}</td>
+                        <td><button onClick={() => handleDownload(document.id, document.title)}>Download</button></td>
+                        <td><button onClick={() => handleDelete(document.id)}>Obriši</button></td>
+                    </tr>
+                ))}
                 </tbody>
             </table>
         </div>
