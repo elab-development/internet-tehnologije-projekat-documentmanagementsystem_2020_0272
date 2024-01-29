@@ -1,0 +1,29 @@
+.documents-container {
+    padding: 20px;
+    background-color: #cfe8ef;
+}
+
+.documents-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #aed1e6;
+}
+
+.documents-table th,
+.documents-table td {
+    padding: 10px;
+    border: 1px solid #85c7de;
+    text-align: left;
+}
+
+.documents-table th {
+    background-color: #c6dbf0;
+}
+
+.documents-table tr:nth-child(even) {
+    background-color: #a0c4e2;
+}
+
+.documents-table tr:hover {
+    background-color: #85c7de;
+}
