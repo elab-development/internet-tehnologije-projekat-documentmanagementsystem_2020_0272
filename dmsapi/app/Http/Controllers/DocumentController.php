@@ -159,19 +159,40 @@ class DocumentController extends Controller
     public function download($id)
     {
         $document = Document::findOrFail($id);
-
-        //   'file_path' čuva putanju do fajla u sistemu fajlova
-        $filePath = $document->file_path;
-
-        if (!Storage::exists($filePath)) {
+        $filePath = storage_path('app/public/' . $document->file_path);
+    
+        if (!file_exists($filePath)) {
             return response()->json(['message' => 'File not found.'], 404);
         }
-
-        // Povratni naziv fajla koji korisnik vidi prilikom preuzimanja
+    
         $fileName = basename($filePath);
-
-        // Preuzimanje fajla koristeći Laravel-ovu funkcionalnost za rad sa fajlovima
-        return Storage::download($filePath, $fileName);
+        $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+    
+        // Određivanje MIME tipa na osnovu ekstenzije fajla
+        $mimeType = $this->getMimeType($fileExtension);
+    
+        // Preuzimanje fajla sa ispravnim MIME tipom
+        return response()->download($filePath, $fileName, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"'
+        ]);
+        
     }
+    
+    // Pomoćna funkcija za dobijanje MIME tipa
+    private function getMimeType($extension)
+    {
+        $mimeTypes = [
+            'pdf' => 'application/pdf',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'txt' => 'text/plain',
+            
+        ];
+    
+        return $mimeTypes[$extension] ?? 'application/octet-stream';  
+    }
+    
 
 }

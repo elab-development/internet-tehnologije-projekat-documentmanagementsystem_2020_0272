@@ -14,7 +14,28 @@ const DocumentsTable = () => {
                 console.error('There was an error fetching the documents:', error);
             });
     }, []);
-
+ 
+    const handleDownload = (documentId, fileName) => {
+        axios({
+            url: `http://127.0.0.1:8000/api/documents/${documentId}/download`,  
+            method: 'GET',
+            responseType: 'blob', // Važno za preuzimanje fajlova  */////Opcija responseType: 'blob' u Axios zahtevu označava da želite da odgovor koji primate od servera bude predstavljen kao "Blob" objekt u JavaScriptu. "Blob" (Binary Large Object) je tip objekta koji se koristi za predstavljanje binarnih podataka, kao što su slike, audio datoteke, ili u ovom slučaju, datoteke koje preuzimate sa servera.
+        })
+        .then((response) => {
+          
+            const blob = new Blob([response.data], { type: response.headers['content-type'] });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fileName); 
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+        })
+        .catch((error) => {
+            console.error('There was an error downloading the file:', error);
+        });
+    };
     return (
         <div className="documents-container">
             <table className="documents-table">
@@ -27,7 +48,7 @@ const DocumentsTable = () => {
                         <th>Category ID</th>
                         <th>Tags</th>
                         <th>Public</th>
-                        <th>Downloads</th>
+                        <th>Download</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,8 +60,8 @@ const DocumentsTable = () => {
                             <td>{document.author_id}</td>
                             <td>{document.category_id}</td>
                             <td>{document.tags.join(', ')}</td>
-                            <td>{document.is_public ? 'Yes' : 'No'}</td>
-                            <td>{document.downloads}</td>
+                            <td>{document.is_public ? 'Yes' : 'No'}</td> 
+                            <td><button onClick={() => handleDownload(document.id, document.title)}>Download</button></td>
                         </tr>
                     ))}
                 </tbody>
