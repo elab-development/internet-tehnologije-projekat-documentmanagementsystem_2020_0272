@@ -2,19 +2,21 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './DocumentsTable.css';
 import DocumentTableRow from './DocumentTableRow';
+import useDocuments from './useDocuments';
 
 const DocumentsTable = () => {
-    const [documents, setDocuments] = useState([]);
+    const { documents,setDocuments, error } = useDocuments();
+    // const [documents, setDocuments] = useState([]);
 
-    useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/documents')
-            .then(response => {
-                setDocuments(response.data);
-            })
-            .catch(error => {
-                console.error('There was an error fetching the documents:', error);
-            });
-    }, []);
+    // useEffect(() => {
+    //     axios.get('http://127.0.0.1:8000/api/documents')
+    //         .then(response => {
+    //             setDocuments(response.data);
+    //         })
+    //         .catch(error => {
+    //             console.error('There was an error fetching the documents:', error);
+    //         });
+    // }, []);
  
     const handleDownload = (documentId, fileName) => {
         axios({
@@ -53,7 +55,9 @@ const DocumentsTable = () => {
                 console.error('Došlo je do greške prilikom brisanja dokumenta:', error);
             });
     };
-    
+    if (error) {
+        return <div>Došlo je do greške: {error.message}</div>;
+    }
     return (
         <div className="documents-container">
             <table className="documents-table">
