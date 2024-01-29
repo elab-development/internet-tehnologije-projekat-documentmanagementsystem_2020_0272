@@ -35,13 +35,13 @@ const ITDocumentsComponent = () => {
   }, []);
 
   return (
-    <div>
+    <div className="it-documents-container">
       {documents.map((doc, index) => (
-        <div key={index}>
-          <h2>{doc.title}</h2>
-          <p>{doc.summary}</p>
-            <a href={doc.pdfLink} target="_blank" rel="noopener noreferrer">PDF Link</a>
-          <p>Authors: {doc.authors.toString()}</p>
+       <div key={index} className="document">
+           <h2 className="title">{doc.title}</h2>
+           <p className="summary">{doc.summary}</p>
+           <a href={doc.pdfLink} target="_blank" rel="noopener noreferrer" className="pdf-link">PDF Link</a>
+           {/* <p className="authors">Authors: {doc.author.name._text}</p> */}
         </div>
       ))}
     </div>

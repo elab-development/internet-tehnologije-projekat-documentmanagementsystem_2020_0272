@@ -13,26 +13,40 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.it-documents-container {
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.document {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 10px 0;
+  width: 80%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 8px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.title {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.summary {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.pdf-link {
+  color: #007bff;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+
+.authors {
+  font-style: italic;
+  color: #555;
 }
