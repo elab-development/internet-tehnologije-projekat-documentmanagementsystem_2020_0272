@@ -33,9 +33,16 @@ const Navbar = ({ token, setToken }) => {
           <Link to="/" className="nav-link">Home</Link>
         </li>
         {token ? (
+          <>
+        <li>
+          <Link to="/docs/upload" className="nav-link">Upload</Link>
+        </li>
+        <li>
+          <Link to="/docs" className="nav-link">Documents</Link>
+        </li>
           <li>
             <button className="nav-link" onClick={handleLogout}>Logout</button>
-          </li>
+          </li></>
         ) : (
           <>
             <li>

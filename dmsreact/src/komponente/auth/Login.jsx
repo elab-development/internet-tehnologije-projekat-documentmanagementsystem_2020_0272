@@ -3,8 +3,10 @@ import './Login.css';
 import { FaUser } from "react-icons/fa";
 import InputField from './InputField';
 import axios from 'axios'; 
+import { useNavigate } from 'react-router-dom';
 
 const Login = ({setToken}) => {
+  let navigate=useNavigate();
   const [formData, setFormData] = useState({
     email: 'ana@gmail.com',
     password: 'anaana1234',
@@ -20,10 +22,12 @@ const Login = ({setToken}) => {
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login', formData);  
       const { token } = response.data;
+      console.log(response.data);
       setToken(token)
       sessionStorage.setItem('token', token);  
+      sessionStorage.setItem('id',response.data.user.id);
       console.log('Login successful');  
-    
+      navigate('/docs');
     } catch (error) {
       console.error(error);
      

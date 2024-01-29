@@ -31,7 +31,7 @@ class DocumentController extends Controller
             'tags' => 'required|array',      //Ovo pravilo zahteva da polje 'tags' bude prisutno u zahtevu (ne smije biti prazno ili null) i da bude niz (array).
             'tags.*' => 'distinct|exists:tags,id',  //Ovo pravilo se primenjuje na svaki element niza 'tags'.  //distinct' proverava da svaki tag u nizu bude jedinstven, tj. da se ne ponavlja više puta.
             'file' => 'required|file', // Pravilo za validaciju uploadovanog fajla
-            'is_public' => 'required|boolean',
+         //   'is_public' => 'required',
             'downloads' => 'required|numeric',
         ]);
 
@@ -47,7 +47,7 @@ class DocumentController extends Controller
             $filePath = $file->store('documents', 'public'); // Sačuvaj fajl i vrati putanju
             $documentData['file_path'] = $filePath;
         }
-
+        $documentData['is_public'] = 0;
         // Kreiraj dokument i postavi kategoriju
         $document = Document::create($documentData);
 
