@@ -27,3 +27,7 @@
 .documents-table tr:hover {
     background-color: #85c7de;
 }
+
+ul{
+    list-style-type: none;
+}

@@ -6,7 +6,7 @@ import useDocuments from '../customHooks/useDocuments';
 import useCategories from '../customHooks/useCategories';
 import useTags from '../customHooks/useTags';
 import DocumentEditModal from './update/DocumentEditModal';
- 
+
 
 const DocumentsTable = () => {
     const { documents,setDocuments, error } = useDocuments();
@@ -17,6 +17,9 @@ const DocumentsTable = () => {
     const [filteredDocuments, setFilteredDocuments] = useState([]);
     const {categories,setCategories} = useCategories();
     const {tags,setTags} = useTags();
+    const [currentPage, setCurrentPage] = useState(1);
+    const documentsPerPage = 3;
+
     const handleEdit = (document) => {
         setCurrentDocument(document);
         setIsEditModalOpen(true);
@@ -120,6 +123,23 @@ const DocumentsTable = () => {
     if (error) {
         return <div>Došlo je do greške: {error.message}</div>;
     }
+    const indexOfLastDocument = currentPage * documentsPerPage;
+    const indexOfFirstDocument = indexOfLastDocument - documentsPerPage;
+    const currentDocuments = filteredDocuments.slice(indexOfFirstDocument, indexOfLastDocument);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(filteredDocuments.length / documentsPerPage); i++) {
+      pageNumbers.push(i);
+    }
+    const renderPageNumbers = pageNumbers.map(number => {
+        return (
+          <li key={number} className='page-item'>
+            <button onClick={() => paginate(number)}   className='page-link'>
+              {number}
+            </button>
+          </li>
+        );
+      });
     return (
         <div className="documents-container">
             <div className="filter-container">
@@ -171,7 +191,7 @@ const DocumentsTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredDocuments.map((document) => (
+                    {currentDocuments.map((document) => (
                         <DocumentTableRow
                         key={document.id}
                         document={document}
@@ -183,6 +203,12 @@ const DocumentsTable = () => {
                     </tbody>
 
             </table>
+            <div>
+            <ul className='pagination'>
+                {renderPageNumbers}
+            </ul>
+            </div>
+
             {isEditModalOpen && currentDocument && (
                 <DocumentEditModal
                     document={currentDocument}
