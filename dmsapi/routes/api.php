@@ -31,6 +31,7 @@ Route::post('/login', [AuthController::class, 'login']);
  
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('statistics', [DocumentController::class, 'statistics']);
     Route::apiResource('documents', DocumentController::class);
         Route::apiResource('tags', TagController::class);
         Route::apiResource('categories', CategoryController::class);

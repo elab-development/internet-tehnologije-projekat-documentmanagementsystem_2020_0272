@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -212,6 +213,25 @@ class DocumentController extends Controller
     
         return $mimeTypes[$extension] ?? 'application/octet-stream';  
     }
+    public function statistics()
+    {
+        $statistics = [];
     
+        // Iteriramo kroz sve kategorije
+        foreach (Category::all() as $category) {
+            // Brojimo koliko fajlova pripada trenutnoj kategoriji
+            $documentCount = Document::where('category_id', $category->id)->count();
+    
+            // Dodajemo broj fajlova u statistiku za trenutnu kategoriju sa njenim nazivom
+            $statistics[] = [
+                'category_id' => $category->id,
+                'category_name' => $category->name,
+                'document_count' => $documentCount,
+            ];
+        }
+    
+        return $statistics;
+    }
+
 
 }

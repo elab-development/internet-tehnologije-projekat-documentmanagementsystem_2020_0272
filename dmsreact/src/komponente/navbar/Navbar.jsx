@@ -43,6 +43,9 @@ const Navbar = ({ token, setToken }) => {
         <li>
           <Link to="/docs" className="nav-link">Documents</Link>
         </li>
+        <li>
+          <Link to="/statistike" className="nav-link">statistike</Link>
+        </li>
           <li>
             <button className="nav-link" onClick={handleLogout}>Logout</button>
           </li></>

@@ -9,6 +9,7 @@ import { useState } from 'react';
 import DocumentsTable from './komponente/documents/DocumentsTable';
 import DocumentUpload from './komponente/documents/DocumentUpload';
 import ITDocumentsComponent from './komponente/documents/spoljniApi/ITDocumentsComponent';
+import Statistike from './komponente/admin/Statistike';
 function App() {
   const [token,setToken]=useState(null);
   return (
@@ -23,6 +24,10 @@ function App() {
           <Route path="/docs" element={<DocumentsTable />} />
           <Route path="/login" element={<Login  setToken={setToken}/>} />
           <Route path="/register" element={<Register />} />
+
+
+          <Route path="/statistike" element={<Statistike />} />
+ 
         </Routes>
     </Router>
     
