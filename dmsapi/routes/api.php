@@ -19,23 +19,21 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/documents/search', [DocumentController::class, 'search']);  //GET /api/documents/search?title=izveštaj&category_id=3&tags[]=1&tags[]=5&is_public=1
 Route::get('/documents/{document}/download', [DocumentController::class, 'download']);
+
+Route::get('/documents/search', [DocumentController::class, 'search']);  //GET /api/documents/search?title=izveštaj&category_id=3&tags[]=1&tags[]=5&is_public=1
 
 
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
-Route::post('/reset-password', [PasswordResetController::class, 'reset']);
-
-
-Route::apiResource('documents', DocumentController::class);
-Route::apiResource('comments', CommentController::class);
-Route::apiResource('tags', TagController::class);
-Route::apiResource('categories', CategoryController::class);
+Route::post('/reset-password', [PasswordResetController::class, 'reset']); 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-
-
+ 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::apiResource('documents', DocumentController::class);
+        Route::apiResource('tags', TagController::class);
+        Route::apiResource('categories', CategoryController::class);
+        Route::apiResource('comments', CommentController::class);
     Route::post('/changePassword', [AuthController::class, 'changePassword']);
 });

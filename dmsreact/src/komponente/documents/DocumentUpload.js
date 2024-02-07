@@ -41,7 +41,8 @@ const DocumentUpload = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData.is_public)
+        const token = sessionStorage.getItem('token');
+    
         const data = new FormData();
         data.append('title', formData.title);
         data.append('content', formData.content);
@@ -51,17 +52,22 @@ const DocumentUpload = () => {
         data.append('file', formData.file);
         data.append('is_public', formData.is_public);
         data.append('downloads', formData.downloads);
-
-        axios.post('http://127.0.0.1:8000/api/documents', data)
-            .then(response => {
-                console.log('Document uploaded successfully:', response.data);
-                alert('Document uploaded successfully');
-                navigate('/docs');
-            })
-            .catch(error => {
-                console.error('Error uploading document:', error);
-            });
+    
+        axios.post('http://127.0.0.1:8000/api/documents', data, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            console.log('Document uploaded successfully:', response.data);
+            alert('Document uploaded successfully');
+            navigate('/docs');
+        })
+        .catch(error => {
+            console.error('Error uploading document:', error);
+        });
     };
+    
 
     return (
         <div className="register-container">

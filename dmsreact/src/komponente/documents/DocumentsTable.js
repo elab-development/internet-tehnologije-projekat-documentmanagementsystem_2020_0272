@@ -70,14 +70,16 @@ const DocumentsTable = () => {
         })
         .then((response) => {
           
-            const blob = new Blob([response.data], { type: response.headers['content-type'] });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', fileName); 
-            document.body.appendChild(link);
-            link.click();
-            link.parentNode.removeChild(link);
+            const blob = new Blob([response.data], { type: response.headers['content-type'] });  //Ova linija koda stvara objekt Blob (Binary Large Object) koji predstavlja binarni podatak. response.data pretpostavlja se da sadrži binarni podatak koji je došao kao odgovor na HTTP zahtjev. response.headers['content-type'] koristi se za postavljanje tipa sadržaja (MIME tip) za taj objekt Blob, na osnovu informacija iz zaglavlja odgovora.
+            const url = window.URL.createObjectURL(blob);  //Ova linija koda koristi window.URL.createObjectURL metodu kako bi se stvorila URL adresa koja se odnosi na Blob objekt stvoren u prethodnoj liniji. Ova URL adresa će biti privremeno dostupna i može se koristiti za preuzimanje sadržaja.
+            const link = document.createElement('a'); //Ova linija koda stvara novi HTML element <a> (hipertekstualna veza) koji će se koristiti za kreiranje linka za preuzimanje datoteke.
+            link.href = url;  //Ova linija koda postavlja href atribut HTML elementa <a> na prethodno stvorenu URL adresu, čime se veza povezuje s Blob objektom i omogućava preuzimanje sadržaja.
+            link.setAttribute('download', fileName);  //Ova linija koda postavlja atribut download na HTML elementu <a> i dodjeljuje mu vrijednost fileName. To omogućava korisnicima da preuzmu sadržaj sa zadanim imenom datoteke kada kliknu na vezu.
+            document.body.appendChild(link); //Ova linija koda dodaje HTML element <a> u telo (body) HTML dokumenta, čime se omogućava njegovo prikazivanje na stranici.
+            link.click(); //pokrece preuzimanje fajla
+            link.parentNode.removeChild(link); //Na kraju, ova linija koda uklanja HTML element <a> iz dokumenta kako bi se oslobodili resursi i očistila stranica od tog elementa nakon preuzimanja.
+
+            
         })
         .catch((error) => {
             console.error('There was an error downloading the file:', error);

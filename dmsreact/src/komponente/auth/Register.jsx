@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import './Register.css';
 import InputField from './InputField';
-import axios from 'axios'; // Dodajte Axios import
-import { useNavigate } from 'react-router-dom'; // Dodajte import za useNavigate
+import axios from 'axios';  
+import { useNavigate } from 'react-router-dom';  
 
 const Register = () => {
   const [formData, setFormData] = useState({
     name: 'ana',
-    email: 'ana@gmail.com',
+    email: 'anaa@gmail.com',
     password: 'anaana1234',
     password_confirmation: 'anaana1234',
     date_of_birth: '2000-01-01',
