@@ -50,17 +50,7 @@ const DocumentsTable = () => {
             });
     };
     
-    // const [documents, setDocuments] = useState([]);
-
-    // useEffect(() => {
-    //     axios.get('http://127.0.0.1:8000/api/documents')
-    //         .then(response => {
-    //             setDocuments(response.data);
-    //         })
-    //         .catch(error => {
-    //             console.error('There was an error fetching the documents:', error);
-    //         });
-    // }, []);
+ 
  
     const handleDownload = (documentId, fileName) => {
         axios({
