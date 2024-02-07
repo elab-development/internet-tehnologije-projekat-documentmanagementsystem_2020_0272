@@ -5,21 +5,23 @@ import InputField from '../auth/InputField';
 import { useNavigate } from 'react-router-dom';
 import useCategories from '../customHooks/useCategories';
 import useTags from '../customHooks/useTags';
+
 const DocumentUpload = () => {
-    let navigate= useNavigate();
+    let navigate = useNavigate();
     const [formData, setFormData] = useState({
         title: '',
         content: '',
         author_id: '',
         category_id: '',
+        new_category_name: '', // Dodali smo polje za unos novog naziva kategorije
         tags: '',
         file: null,
         is_public: false,
         downloads: 0
     });
 
-    const {categories,setCategories} = useCategories();
-    const {tags,setTags} = useTags();
+    const { categories, setCategories } = useCategories();
+    const { tags, setTags } = useTags();
 
     const handleChange = (e) => {
         const { name, type, value, options } = e.target;
@@ -31,9 +33,6 @@ const DocumentUpload = () => {
             setFormData({ ...formData, [name]: value });
         }
     };
-    
-    
-    
 
     const handleFileChange = (e) => {
         setFormData({ ...formData, file: e.target.files[0] });
@@ -47,8 +46,30 @@ const DocumentUpload = () => {
         data.append('title', formData.title);
         data.append('content', formData.content);
         data.append('author_id', Number(sessionStorage.getItem("id")));
-        data.append('category_id', formData.category_id);
-        data.append('tags[]', formData.tags); // Ovo je niz u   Laravel aplikaciji
+    
+        // Check if a new category name is provided
+        if (formData.new_category_name) {
+            // If new category name is provided, use it
+            data.append('category_name', formData.new_category_name);
+        } else if (formData.category_id) {
+            // If an existing category is selected and no new category name is provided
+            const selectedCategory = categories.find(category => category.id.toString() === formData.category_id);
+            if (selectedCategory) {
+                data.append('category_name', selectedCategory.name);
+            } else {
+                // Handle error if category_id is set but no matching category is found
+                console.error('Selected category not found');
+                return; // Stop the form submission
+            }
+        } else {
+            // If neither new category name is provided nor an existing category is selected
+            // You might want to handle this as an error or a case of missing category information
+            console.error('No category selected or provided');
+            return; // Stop the form submission
+        }
+        
+        // Append other form data
+        data.append('tags[]', formData.tags);
         data.append('file', formData.file);
         data.append('is_public', formData.is_public);
         data.append('downloads', formData.downloads);
@@ -68,6 +89,7 @@ const DocumentUpload = () => {
         });
     };
     
+    
 
     return (
         <div className="register-container">
@@ -77,9 +99,9 @@ const DocumentUpload = () => {
                     <InputField label="Title" type="text" id="title" name="title" value={formData.title} onChange={handleChange} required />
                     <InputField label="Content" type="text" id="content" name="content" value={formData.content} onChange={handleChange} required />
                     <div className="input-group">
-                        <label htmlFor="category_id">Category ID</label>
-                        <select id="category_id" name="category_id" value={formData.category_id} onChange={handleChange} required>
-                            <option value="">Select a category</option>
+                        <label htmlFor="category_id">Category</label>
+                        <select id="category_id" name="category_id" value={formData.category_id} onChange={handleChange}>
+                            <option value="">Select or create a category</option>
                             {categories.map((category) => (
                                 <option key={category.id} value={category.id}>
                                     {category.name}
@@ -87,6 +109,8 @@ const DocumentUpload = () => {
                             ))}
                         </select>
                     </div>
+                   
+                    <InputField label="New Category Name" type="text" id="new_category_name" name="new_category_name" value={formData.new_category_name} onChange={handleChange} />
                     <div className="input-group">
                         <label htmlFor="tags">Tags</label>
                         <select id="tags" name="tags" multiple value={formData.tags} onChange={handleChange} required>

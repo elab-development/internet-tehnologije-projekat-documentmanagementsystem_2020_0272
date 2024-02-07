@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Document;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,40 +23,52 @@ class DocumentController extends Controller
         return response()->json($document);
     }
 
+ 
+
     public function store(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:255',
             'content' => 'required',
             'author_id' => 'required|exists:users,id',
-            'category_id' => 'required|exists:categories,id', 
-            'tags' => 'required|array',      //Ovo pravilo zahteva da polje 'tags' bude prisutno u zahtevu (ne smije biti prazno ili null) i da bude niz (array).
-            'tags.*' => 'distinct|exists:tags,id',  //Ovo pravilo se primenjuje na svaki element niza 'tags'.  //distinct' proverava da svaki tag u nizu bude jedinstven, tj. da se ne ponavlja više puta.
-            'file' => 'required|file', // Pravilo za validaciju uploadovanog fajla
-         //   'is_public' => 'required',
+            'category_name' => 'required|max:255',  
+            'tags' => 'required|array',
+            'tags.*' => 'distinct|exists:tags,id',
+            'file' => 'required|file',
             'downloads' => 'required|numeric',
         ]);
-
+      
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+        DB::beginTransaction();
+        try {
+            $requestData = $validator->validated();
+        
+            // Proveravamo da li kategorija već postoji
+            $category = Category::firstOrCreate(['name' => $requestData['category_name']]);
+        
+            // Obrada uploada fajla
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $filePath = $file->store('documents', 'public');
+                $requestData['file_path'] = $filePath;
+            }
+            
+            $requestData['category_id'] = $category->id; // Postavljamo ID kategorije u zahtevu
+        
+            // Kreiramo dokument
+            $document = Document::create($requestData);
+            DB::commit();
+        } catch (\Exception $e) {
+            // Ukoliko se desi bilo koja greška, rollback transakcije
+            DB::rollback();
 
-        $documentData = $validator->validated();
-
-        // Obrada uploada fajla
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $filePath = $file->store('documents', 'public'); // Sačuvaj fajl i vrati putanju
-            $documentData['file_path'] = $filePath;
+            return response()->json($document, 201);
         }
-        $documentData['is_public'] = 0;
-        // Kreiraj dokument i postavi kategoriju
-        $document = Document::create($documentData);
-
-        // Kako su tagovi predstavljeni kao niz, treba ih konvertovati u string pre snimanja
-       // $document->tags()->sync($request->tags);   //Ova linija koda se koristi za uspostavljanje veze many-to-many između Document i Tag. Metoda sync prima niz ID-ova tagova i ažurira odgovarajuću pivot tabelu, uklanjajući sve postojeće veze i dodajući nove. S obzirom na vašu strukturu, ovo je ispravno za rad sa tagovima.
-        return response()->json($document, 201);
     }
+    
 
     public function update(Request $request, $id)
     {
