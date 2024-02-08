@@ -36,7 +36,7 @@ class UsersTableSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'date_of_birth' => '1995-09-10',
                 'bio' => 'Ovo je Zika.',
-                'role' => 'admin',
+                'uloga' => 'admin',
             ],
         ];
 

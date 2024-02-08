@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 const Login = ({setToken}) => {
   let navigate=useNavigate();
   const [formData, setFormData] = useState({
-    email: 'ana@gmail.com',
-    password: 'anaana1234',
+    email: 'pera@example.com',
+    password: 'password',
   });
 
   const handleChange = (e) => {
@@ -26,8 +26,14 @@ const Login = ({setToken}) => {
       setToken(token)
       sessionStorage.setItem('token', token);  
       sessionStorage.setItem('id',response.data.user.id);
+      sessionStorage.setItem('uloga',response.data.user.uloga);
       console.log('Login successful');  
-      navigate('/docs');
+      if(response.data.user.uloga=="korisnik"){
+        navigate('/docs');
+      }else{
+        navigate('/statistike');
+      }
+     
     } catch (error) {
       console.error(error);
      

@@ -23,7 +23,7 @@ class User extends Authenticatable
         'password',
         'date_of_birth',
         'bio',
-        'role',
+        'uloga',
 
     ];
 
