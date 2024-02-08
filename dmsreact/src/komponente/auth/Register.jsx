@@ -13,7 +13,7 @@ const Register = () => {
     date_of_birth: '2000-01-01',
     bio: 'ana bio'
   });
-
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();  
 
   const handleChange = (e) => {
@@ -25,7 +25,7 @@ const Register = () => {
       const response = await axios.get('https://api.api-ninjas.com/v1/passwordgenerator?length=16', {
         headers: { 'X-Api-Key': 'QxMU0Daw1G4sRqVm6vPxjIB216188KMvISmtSJ1K'},
       });
-      setFormData({ ...formData, password: response.data, password_confirmation: response.data });
+      setFormData({ ...formData, password: response.data.random_password, password_confirmation: response.data.random_password });
     } catch (error) {
       console.error('Error generating password: ', error);
     }
@@ -42,7 +42,9 @@ const Register = () => {
       console.error(error);
     }
   };
-
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <div className="register-container">
       <div className="register-card">
@@ -66,9 +68,9 @@ const Register = () => {
             onChange={handleChange}
             required
           />
-          <InputField
+ <InputField
             label="Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             name="password"
             value={formData.password}
@@ -77,13 +79,16 @@ const Register = () => {
           />
           <InputField
             label="Confirm Password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="confirmPassword"
             name="password_confirmation"
             value={formData.password_confirmation}
             onChange={handleChange}
             required
           />
+           <button type="button" onClick={toggleShowPassword} className="show-password-button">
+            {showPassword ? "Hide Password" : "Show Password"}
+          </button>
           <button type="button" onClick={generatePassword} className="generate-password-button">
             Generate Password
           </button>
