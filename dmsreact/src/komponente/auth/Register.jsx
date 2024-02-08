@@ -8,8 +8,8 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: 'ana',
     email: 'anaa@gmail.com',
-    password: 'anaana1234',
-    password_confirmation: 'anaana1234',
+    password: '',
+    password_confirmation: '',
     date_of_birth: '2000-01-01',
     bio: 'ana bio'
   });
@@ -18,6 +18,17 @@ const Register = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const generatePassword = async () => {
+    try {
+      const response = await axios.get('https://api.api-ninjas.com/v1/passwordgenerator?length=16', {
+        headers: { 'X-Api-Key': 'QxMU0Daw1G4sRqVm6vPxjIB216188KMvISmtSJ1K'},
+      });
+      setFormData({ ...formData, password: response.data, password_confirmation: response.data });
+    } catch (error) {
+      console.error('Error generating password: ', error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -29,17 +40,15 @@ const Register = () => {
       navigate('/login');  
     } catch (error) {
       console.error(error);
-       
     }
   };
-
 
   return (
     <div className="register-container">
       <div className="register-card">
         <h2>Register</h2>
         <form className="register-form" onSubmit={handleSubmit}>
-          <InputField
+        <InputField
             label="Name"
             type="text"
             id="name"
@@ -71,28 +80,13 @@ const Register = () => {
             type="password"
             id="confirmPassword"
             name="password_confirmation"
-            value={formData.confirmPassword}
+            value={formData.password_confirmation}
             onChange={handleChange}
             required
           />
-          <InputField
-            label="Date of Birth"
-            type="date"
-            id="dateOfBirth"
-            name="date_of_birth"
-            value={formData.dateOfBirth}
-            onChange={handleChange}
-            required
-          />
-          <InputField
-            label="Bio"
-            type="textarea"
-            id="bio"
-            name="bio"
-            value={formData.bio}
-            onChange={handleChange}
-            required
-          />
+          <button type="button" onClick={generatePassword} className="generate-password-button">
+            Generate Password
+          </button>
           <button type="submit" className="register-button">Register</button>
         </form>
       </div>
