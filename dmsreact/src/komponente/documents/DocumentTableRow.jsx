@@ -17,9 +17,9 @@ const DocumentTableRow = ({ document, onDelete, onDownload,onEdit }) => {
             <td>{document.id}</td>
             <td>{document.title}</td>
             <td>{document.content}</td>
-            <td>{document.author_id}</td>
-            <td>{document.category_id}</td>
-            <td>{document.tags.join(', ')}</td>
+            <td>{document.author.name}</td>
+            <td>{document.category.name}</td>
+            <td>{document.tags && document.tags.join(', ')}</td>
             <td>{document.is_public ? 'Yes' : 'No'}</td>
             <td>
                 <button onClick={handleDownload}>Download</button>

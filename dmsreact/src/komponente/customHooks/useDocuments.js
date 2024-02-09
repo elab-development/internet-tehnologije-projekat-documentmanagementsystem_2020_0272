@@ -14,7 +14,7 @@ const useDocuments = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                setDocuments(response.data);
+                setDocuments(response.data.data);
             } catch (error) {
                 console.error('There was an error fetching the documents:', error);
                 setError(error);

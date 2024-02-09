@@ -8,25 +8,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Document extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
+
     protected $fillable = [
-        'title',
-        'content', 
-        'file_path', 
-        'author_id',
-        'downloads' ,
-        'is_public',
-        'category_id',
-        'tags'
-       
+        'title', 'content', 'file_path', 'author_id', 'downloads', 'is_public', 'category_id', 'tags'
     ];
+
     public function author()
     {
         return $this->belongsTo(User::class, 'author_id');
     }
 
-    public function categories()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
@@ -35,21 +28,24 @@ class Document extends Model
     {
         return $this->belongsToMany(Tag::class);
     }
-    public function setTagsAttribute($value)// Konvertujemo niz tagova u string i cuvamo kao string u bazu
+
+    public function getTagNamesAttribute()
     {
-        // Samo konvertujemo u string ako je $value niz
+        // Dohvata nazive tagova i vraća ih kao niz
+        return $this->tags()->pluck('name')->toArray();
+    }
+
+    public function setTagsAttribute($value)
+    {
         if (is_array($value)) {
             $this->attributes['tags'] = implode(',', $value);
         } else {
-            // Ako je $value već string, jednostavno ga postavljamo
             $this->attributes['tags'] = $value;
         }
     }
-    
 
-    public function getTagsAttribute($value)// Uzimamo string tagova iz baze i pretvaramo ga u niz
+    public function getTagsAttribute($value)
     {
-        
         return explode(',', $value);
     }
 }

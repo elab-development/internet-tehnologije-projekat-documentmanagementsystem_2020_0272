@@ -35,7 +35,7 @@ const DocumentsTable = () => {
     
         const updatedData = {
             ...editFormData,
-            tags: editFormData.tags.map(Number)
+            tags: editFormData.tags 
         };
         console.log(updatedData.tags)
         axios.put(`http://127.0.0.1:8000/api/documents/${documentId}`, updatedData, config)
@@ -92,25 +92,29 @@ const DocumentsTable = () => {
             });
     };
     useEffect(() => {
-     
         const filterDocuments = () => {
             let updatedFilteredDocuments = [...documents];
 
             if (filterByCategory) {
-                updatedFilteredDocuments = updatedFilteredDocuments.filter(document => document.category_id.toString() === filterByCategory);
+                updatedFilteredDocuments = updatedFilteredDocuments.filter(document => 
+                    document.category && document.category.name === filterByCategory);
             }
-
+    
             if (filterByTags.length > 0) {
                 updatedFilteredDocuments = updatedFilteredDocuments.filter(document =>
-                    filterByTags.every(tag => document.tags.map(tag => tag.toString()).includes(tag))
+                    filterByTags.every(tagName => 
+                        document.tags && document.tags.includes(tagName))
                 );
             }
-
+            
+    
             setFilteredDocuments(updatedFilteredDocuments);
         };
-
+    
         filterDocuments();
-    }, [documents, filterByTags, filterByCategory]);   // Ovde primenjujemo filtere svaki put kada se promeni stanje `documents`, `filterByTags`, ili `filterByCategory`
+    }, [documents, filterByTags, filterByCategory]);
+    
+   // Ovde primenjujemo filtere svaki put kada se promeni stanje `documents`, `filterByTags`, ili `filterByCategory`
       
     if (error) {
         return <div>Došlo je do greške: {error.message}</div>;
@@ -138,32 +142,34 @@ const DocumentsTable = () => {
                 <div className="input-group">
                     <label htmlFor="filter-category">Filter by Category</label>
                     <select id="filter-category" value={filterByCategory} onChange={(e) => setFilterByCategory(e.target.value)}>
-                    <option value="">All Categories</option>
-                    {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                        {category.name}
-                        </option>
-                    ))}
+                        <option value="">All Categories</option>
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.name}>
+                                {category.name}
+                            </option>
+                        ))}
                     </select>
+
                 </div>
                 <div className="input-group">
                     <label htmlFor="filter-tags">Filter by Tags</label>
                     <select id="filter-tags" multiple value={filterByTags} onChange={(e) => {
-                    const options = e.target.options;
-                    const value = [];
-                    for (let i = 0, l = options.length; i < l; i++) {
-                        if (options[i].selected) {
-                        value.push(options[i].value);
+                        const options = e.target.options;
+                        const value = [];
+                        for (let i = 0, l = options.length; i < l; i++) {
+                            if (options[i].selected) {
+                                value.push(options[i].label);  
+                            }
                         }
-                    }
-                    setFilterByTags(value);
+                        setFilterByTags(value);
                     }}>
-                    {tags.map((tag) => (
-                        <option key={tag.id} value={tag.id}>
-                        {tag.name}
-                        </option>
-                    ))}
+                        {tags.map((tag) => (
+                            <option key={tag.id} value={tag.name}>
+                                {tag.name}
+                            </option>
+                        ))}
                     </select>
+
                 </div>
                 </div>
 
@@ -173,8 +179,8 @@ const DocumentsTable = () => {
                         <th>ID</th>
                         <th>Title</th>
                         <th>Content</th>
-                        <th>Author ID</th>
-                        <th>Category ID</th>
+                        <th>Author </th>
+                        <th>Category </th>
                         <th>Tags</th>
                         <th>Public</th>
                         <th>Download</th>

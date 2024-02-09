@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DocumentResource;
 use App\Models\Category;
 use App\Models\Document;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class DocumentController extends Controller
     public function index()
     {
         $documents = Document::all();
-        return response()->json($documents);
+        return DocumentResource::collection($documents);
     }
 
     public function show($id)
@@ -109,7 +110,7 @@ class DocumentController extends Controller
     
         $document->update($documentData);
     
-        return response()->json($document);
+        return response()->json(new DocumentResource($document));
     }
     
     public function destroy($id)  //posto nas model koristi softDeletes, onda metoda destroy mora da bude implementirana na malo drugaciji nacin
