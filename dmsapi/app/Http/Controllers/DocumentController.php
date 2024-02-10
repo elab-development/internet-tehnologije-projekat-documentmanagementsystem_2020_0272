@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\DocumentResource;
 use App\Models\Category;
 use App\Models\Document;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -229,23 +230,42 @@ class DocumentController extends Controller
     }
     public function statistics()
     {
-        $statistics = [];
-    
+        // Ukupan broj fajlova
+        $totalDocuments = Document::count();
+        
+        // Ukupan broj korisnika
+        $totalUsers = User::count();
+        
+       
+        
+        $statistics['total_documents'] = $totalDocuments;
+        $statistics['total_users'] = $totalUsers;
+       
+        
+        $statistics2 = [];
+        
         // Iteriramo kroz sve kategorije
         foreach (Category::all() as $category) {
             // Brojimo koliko fajlova pripada trenutnoj kategoriji
             $documentCount = Document::where('category_id', $category->id)->count();
-    
+        
             // Dodajemo broj fajlova u statistiku za trenutnu kategoriju sa njenim nazivom
-            $statistics[] = [
+            $statistics2[] = [
                 'category_id' => $category->id,
                 'category_name' => $category->name,
                 'document_count' => $documentCount,
             ];
         }
     
-        return $statistics;
+        // Spajamo oba niza u jedan
+        $combinedStatistics = array_merge($statistics, ['custom_statistics' => $statistics2]);
+    
+        // Konvertujemo niz u JSON format i vraćamo ga
+        return response()->json($combinedStatistics);
     }
+    
+    
+    
 
 
 }

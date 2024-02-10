@@ -9,7 +9,7 @@ const Navbar = ({ token, setToken }) => {
     const [role, setRole] = useState('');
 
     useEffect(() => {
-        const userRole = sessionStorage.getItem('role');
+        const userRole = sessionStorage.getItem('uloga');
         setRole(userRole);
     }, []);
 

@@ -19,7 +19,11 @@ const DocumentsTable = () => {
     const {tags,setTags} = useTags();
     const [currentPage, setCurrentPage] = useState(1);
     const documentsPerPage = 3;
-
+    const [searchTerm, setSearchTerm] = useState('');
+    
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
     const handleEdit = (document) => {
         setCurrentDocument(document);
         setIsEditModalOpen(true);
@@ -106,13 +110,20 @@ const DocumentsTable = () => {
                         document.tags && document.tags.includes(tagName))
                 );
             }
-            
+
+            if (searchTerm) {
+                const searchTermLower = searchTerm.toLowerCase();
+                updatedFilteredDocuments = updatedFilteredDocuments.filter(document =>
+                    document.title.toLowerCase().includes(searchTermLower) ||
+                    document.author.name.toLowerCase().includes(searchTermLower)
+                );
+            }
     
             setFilteredDocuments(updatedFilteredDocuments);
         };
     
         filterDocuments();
-    }, [documents, filterByTags, filterByCategory]);
+    }, [documents, filterByTags, filterByCategory, searchTerm]);
     
    // Ovde primenjujemo filtere svaki put kada se promeni stanje `documents`, `filterByTags`, ili `filterByCategory`
       
@@ -172,7 +183,13 @@ const DocumentsTable = () => {
 
                 </div>
                 </div>
-
+                <input
+                type="text"
+                placeholder="Pretraži po nazivu ili autoru"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="search-input"
+            />
             <table className="documents-table">
                 <thead>
                     <tr>

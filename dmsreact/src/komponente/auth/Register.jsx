@@ -68,7 +68,7 @@ const Register = () => {
             onChange={handleChange}
             required
           />
- <InputField
+          <InputField
             label="Password"
             type={showPassword ? "text" : "password"}
             id="password"
